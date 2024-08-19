@@ -5,8 +5,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Insert title here</title>
-  <link rel="stylesheet" href="css/xxx.css" />
-  <script src="./js/xxx.js"></script>
+<!--   <link rel="stylesheet" href="css/xxx.css" /> -->
+  <script src="./js/js01.js"></script>
   <script>
     // 한줄 주석
     /* 여러줄 주석 */
@@ -51,7 +51,7 @@
       \" : 큰 따옴표
       \\ : 역슬래쉬문자 즉 \문자를 의미
   */
-  	alert('경고창을 표시합니다!')
+  	alert('xxxxxxxxxxxxxx경고창을 표시합니다!yyyyyyyyyyyyyyyyyyyy')
   	var a = 10;
     var a = '문\'"자열';
     
@@ -60,14 +60,46 @@
     b = "문\"'자";
     
     const c = 10;
-    c = 20;
+    /* c = 20; 에러 */
     
-    let hello_world_javascript
-    `문자열`
-  </script>
+    let helloJavaScript = '카멜케이스'; 
+    let hello_java_script = '스네이크방식';
+    
+    let yyy = '홍길동';
+    let xxx = `안녕하세요 제 이름은 ${yyy} 입니다`;
+    console.log(xxx);    
+  </script> 
 </head>
 <body>
 	<h1 onclick="javascript:alert('1st h1이 클릭 되었습니다!')">1st H1</h1>
 	<h1 onclick="alert('2nd h1이 클릭 되었습니다!')">2nd H1</h1>
+  <hr>
+
+  <h1 id="name"></h1>
+  <h3 id="age"></h3>
+
+  <script>
+    // 실습. 
+    // 이름과 나이를 입력받아서 body에 출력하는 실습
+  
+    let name;
+    let age;
+  
+    name = prompt("이름을 입력하세요!!", '손흥민');
+    age = prompt("나이를 입력하세요!!", 33);
+  
+    console.log(`내 이름은 ${name} 입니다!`);
+    console.log(`내 나이는 ${age}살 입니다!`);
+   
+    document.write(`<h3>내 이름은 ${name} 입니다!</h3>`);
+    document.write(`<h3>내 나이는 ${age}살 입니다!</h3>`);
+  
+    let h1 = document.querySelector('#name');
+    let h3 = document.querySelector('#age');
+
+    console.log(h1);
+    console.log(h3);
+
+  </script>
 </body>
 </html>
