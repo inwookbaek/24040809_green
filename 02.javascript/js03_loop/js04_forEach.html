@@ -3,6 +3,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="./css/js04.css">
   <script>
     // 1. forEach : array와 같이 사용
     //    1) for문과 array
@@ -65,12 +66,31 @@
     // 현재 강의실의 인원수와 한 줄에 3명씩 앉을 경우 
     // 자리배치도를 출력해보기(구구만과 같이 제출)
     // if, for, prompt(memNum과 colNum을 전달), table태그로 출력
-    let memNum = 16;
-    let colNum = 3;
-    
+    let memNum = parseInt(prompt('인원수를 입력하세요!', 16));
+    let colNum = parseInt(prompt('한열의 좌석수를 입력하세요!', 3));
+
+    if(memNum % colNum === 0) {
+      rowNum = parseInt(memNum /  colNum); // 좌석행의 갯수
+    } else {  
+      rowNum = parseInt(memNum / colNum) + 1; 
+    }
+    console.log(`총 좌석행의 수 = ${rowNum}`);
+
+    document.write('<table>');
+    for(let i=0;i<rowNum;i++) {
+      document.write('<tr>');
+      for(let j=1;j<=colNum;j++) {
+        let seatNo = i * colNum + j;  // 좌석번호
+        if(seatNo > memNum) break;
+        document.write(`<td><button>${seatNo}</button></td>`)
+        // document.write(`<td>${seatNo}</td>`)
+      }
+      document.write('</tr>');
+    }
+    document.write('</table>');
   </script>
 </head>
 <body>
-  
+
 </body>
 </html>
