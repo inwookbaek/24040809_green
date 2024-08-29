@@ -16,8 +16,8 @@
 <h1>게시판</h1>
 
 <form id="entryForm">
-    <input type="text" id="title" placeholder="글제목" required>
-    <input type="text" id="description" placeholder="상세내용" required>
+    <input type="text" id="title" placeholder="글제목">
+    <input type="text" id="description" placeholder="상세내용">
     <button type="submit">게시글쓰기</button>
 </form>
 
@@ -35,7 +35,75 @@
 </table>
 
 <script>
+    $(() => {
+        // 1. Add
+        $('#entryForm').on('submit', function(e) {
+            e.preventDefault();
 
+            const title = $('#title').val().trim();
+            const description = $('#description').val().trim();
+
+            if(title === '' || description === '') {
+                alert('글 제목과 상세내용은 반드시 입력해야 합니다!');
+                return;
+            }
+
+            const newRow = `
+                <tr>
+                    <td class="title">${title}</td>    
+                    <td class="description">${description}</td>    
+                    <td>
+                        <button class="editBtn">수정</button>
+                        <button class="deleteBtn">삭제</button>
+                    </td>  
+                </tr>`;
+            $('#bulletinTable tbody').append(newRow);
+            $('#entryForm')[0].reset();
+        })
+
+        // 2. delete
+        $('#bulletinTable').on('click', '.deleteBtn', function() {
+            // closest = parent
+            $(this).closest('tr').remove();
+        });
+
+        // 3. edit
+        $('#bulletinTable').on('click', '.editBtn', function() {
+            const row = $(this).closest('tr');
+            const title = row.find('.title').text();
+            const description = row.find('.description').text();
+            console.log(`${title}, ${description}`);
+
+            $('#title').val(title);
+            $('#description').val(description);
+
+            $('#entryForm').off('submit').on('submit', function(e) {
+                e.preventDefault();
+
+                const title = $('#title').val().trim();
+                const description = $('#description').val().trim();
+
+                if(title === '' || description === '') {
+                    alert('글 제목과 상세내용은 반드시 입력해야 합니다!');
+                    return;
+                }
+
+                const newRow = `
+                    <tr>
+                        <td class="title">${title}</td>    
+                        <td class="description">${description}</td>    
+                        <td>
+                            <button class="editBtn">수정</button>
+                            <button class="deleteBtn">삭제</button>
+                        </td>  
+                    </tr>`;
+
+                $('#bulletinTable tbody').append(newRow);
+                $('#entryForm')[0].reset();                    
+            })
+
+        });        
+    })
 </script>
 
 </body>
