@@ -453,62 +453,283 @@ select ename, sal, comm
 
 -- 실습문제(제출)
 -- ex01) emp테이블에서 ename, hiredate, 근속년, 근속월, 근속일수 출력, deptno = 10;
+-- 근속년
 -- months_between, round, turnc, 개월수계산(/12), 일수계산(/365, /12)
+select ename
+     , hiredate
+		 , months_between(sysdate, hiredate)
+		 , round(months_between(sysdate, hiredate), 0) 
+		 , trunc(months_between(sysdate, hiredate), 0) 근속월수
+		 , trunc(trunc(months_between(sysdate, hiredate),0 ) / 12, 0 ) 근속년수
+		 , trunc(trunc(months_between(sysdate, hiredate),0 ) / 12, 0 ) * 12 근속개월수
+  from emp;
+
+-- 근속월,일
+select ename
+     , hiredate
+		 , trunc(trunc(months_between(sysdate, hiredate),0 ) / 12, 0 ) 근속년수
+		 , trunc(mod(months_between(sysdate, hiredate) / 12, 1) * 12, 0) 근속월
+		 , round(mod(mod(months_between(sysdate, hiredate) / 12, 1) * (365/12), 0)) 근속일
+  from emp;	
+	
 
 -- ex02) student에서 birthday중 생일 1월의 학생의 이름과 생일을 출력(YYYY-MM-DD)
-
+select studno
+     , name
+		 , birthday
+		 , to_char(birthday, 'YYYY-MM-DD')
+		 , to_char(birthday, 'MM')
+  from student
+ where to_char(birthday, 'MM') = '01';
+	
 -- ex03) emp에서 hiredate가 1,2,3월인 사람들의 사번, 이름, 입사일을 출력
+select empno 
+     , ename
+		 , hiredate
+  from emp
+ where to_char(hiredate, 'MM') = '01'
+    or to_char(hiredate, 'MM') = '02'
+	  or to_char(hiredate, 'MM') = '03';
+		
+select empno 
+     , ename
+		 , hiredate
+  from emp
+ where to_char(hiredate, 'MM') in ('01', '02', '03');		
 
 -- ex04) emp 테이블을 조회하여 이름이 'ALLEN' 인 사원의 사번과 이름과 연봉을 
 --       출력하세요. 단 연봉은 (sal * 12)+comm 로 계산하고 천 단위 구분기호로 표시하세요.
---       7499 ALLEN 1600 300 19,500     
+--       7499 ALLEN 1600 300 19,500    
+select ename
+     , sal
+		 , comm
+		 , sal * 12 + comm
+		 , to_char(sal*12+comm, '999,999') as 년봉
+  from emp
+ where ename = 'ALLEN';	 
 
 -- ex05) professor 테이블을 조회하여 201 번 학과에 근무하는 교수들의 이름과 
 --       급여, 보너스, 연봉을 아래와 같이 출력하세요. 단 연봉은 (pay*12)+bonus
 --       로 계산합니다.
 --       name pay bonus 6,970
+select name, pay, bonus
+     , to_char(pay * 12 + bonus, '999,999') 년봉
+		 , to_char(pay * 12 + nvl(bonus,0), '999,999') 년봉
+  from professor
+ where deptno = 201;
+
 
 -- ex06) emp 테이블을 조회하여 comm 값을 가지고 있는 사람들의 empno , ename , hiredate ,
 --       총연봉,15% 인상 후 연봉을 아래 화면처럼 출력하세요. 단 총연봉은 (sal*12)+comm 으로 계산하고 
 --       15% 인상한 값은 총연봉의 15% 인상 값입니다.
 --      (HIREDATE 컬럼의 날짜 형식과 SAL 컬럼 , 15% UP 컬럼의 $ 표시와 , 기호 나오게 하세요)
+select empno
+     , ename
+		 , to_char(hiredate, 'YYYY.MM.DD')
+		 , to_char(sal * 1.15, '$999,999') as "15% 인상급여"
+  from emp;
+
+
 -- ex07) Professor 테이블에서 201번 학과 교수들의 이름과 급여, bonus , 총 연봉을 출력하세요. 
 --       단 총 연봉은 (pay*12+bonus) 로 계산하고 bonus 가 없는 교수는 0으로 계산하세요
+select profno
+     , name
+		 , pay
+		 , nvl(bonus, 0)
+		 , pay + nvl(bonus, 0) 총급여
+  from professor;
+	 
 -- ex08) 아래 화면과 같이 emp 테이블에서 deptno 가 30 번인 사원들을 조회하여 comm 값이 있을 경우
 --       'Exist' 을 출력하고 comm 값이 null 일 경우 'NULL' 을 출력하세요 
+select empno
+     , ename
+		 , comm
+		 , nvl2(comm, 'EXIT', 'NULL')
+  from emp
+ where deptno = 30;
+ 
+-- ex09)student 테이블에서 deptno1 = 101인 학생들의 이름과 전화번호와 블라인딩처리
+--       예) 055)381-****, 02)7777-**** 의 형식으로 출력
+-- instr, substr, replace
+select name
+     , tel
+		 , instr(tel, '-', 1, 1)
+		 , substr(tel, instr(tel, '-', 1, 1)+1, 4)
+		 , replace(tel, substr(tel, instr(tel, '-', 1, 1)+1, 4), '****')
+  from student
+ where deptno1 = 101;
+ 
+/*
+	DECODE 함수
+	1) 통상적으로 if~else문을 decode로 표현한 함수로 오라클에서만 사용되는 함수
+	2) 오라클에서 자주 사용하는 중요한 함수이다
+	3) decode(col, true, false) 즉, col결과(값)가 true일경우 true실행문을 실행, 아니면 fasle실행문을 실행
+	4) decode(deptno, 101, true,
+										102, true,
+										103, true, false) -> if~else if~else
+	5) decode(deptno, 101, decode()....) 중첩if문	
+*/ 
+
+-- 학과정보
+select * from department;
+select * from student;
+
+-- 1. if ~  / if ~ else ~
+-- 101 컴퓨터공학, 아니면 기타학과로 출력
+select name
+		 , deptno1 
+		 , decode(deptno1, 101, '컴퓨터공학')   -- if(true) {}
+		 , decode(deptno1, 101, '컴퓨터공학', '기타학과') -- if ~ else ~
+	from student;
+	
+	
+-- 2. if ~ else if ~ else
+-- 101 컴퓨터공학, 102 미디어융합, 103 소프트공학, 아니면 기타학과
+select name
+		 , deptno1 	
+		 , decode(deptno1, 101, '컴퓨터공학' 
+		                 , 102, '미디어융합'
+										 , 103, '소프트공학'
+										 , '기타학과')
+	from student;
+
+-- 중첩decode if { if {} }
+-- 101학과교수중에 Audie Murphy교수는 'Best Professor' 101이외의 담당교수 'N/A'로 출력하기
+select name
+     , deptno
+		 , decode(deptno, 101, 'Best Professor')
+		 , decode(deptno, 101, decode(name, 'Audie Murphy',  'Best Professor', 'Good Professor'), 'N/A')
+	from professor;
+
+-- 실습
+-- ex01) student에서 전공(deptno1)이 101인 학생들 중에서 jumin에서
+-- 1 or 3이면 '남자', 2 or 4면 '여자'로 출력
+-- substr, decode
+select name
+     , jumin
+		 , substr(jumin, 7, 1)
+		 , decode(substr(jumin, 7, 1), '1', '남자', '2', '여자')
+		 , decode(substr(jumin, 7, 1), '1', '남자', '2', '여자', '3', '남자', '4', '여자')
+  from student
+ where deptno1 = 101;
+ 
+-- ex02) Student 테이블에서 1 전공이 (deptno1) 101번인 학생의 이름과 
+--       연락처와 지역을 출력하세요. 단,지역번호가 02 는 "SEOUL" , 
+--       031 은 "GYEONGGI" , 051 은 "BUSAN" , 052 는 "ULSAN" , 
+--       055 는 "GYEONGNAM"입니다.
+-- substr, instr, decode 
+select name
+     , tel
+		 , instr(tel, ')', 1) - 1
+		 , substr(tel, 1, instr(tel, ')', 1) - 1) 지역번호 
+		 , decode(substr(tel, 1, instr(tel, ')', 1) - 1)
+			        , '02',  '서울'
+							, '031', '경기'
+							, '051', '부산'
+							, '052', '울산'
+							, '053', '대구'
+							, '055', '경남', '기타')
+  from student
+ where deptno1 = 101;
+
+/*
+	CASE 함수
+	1) case 조건 when 결과 then true else false end as 별칭;
+	2) case when between 값1 and 값2 then true else false end as 별칭;
+*/
+-- 1.  case 조건 when
+select name
+     , tel
+		 , instr(tel, ')', 1) - 1
+		 , substr(tel, 1, instr(tel, ')', 1) - 1) 지역번호 
+		 , decode(substr(tel, 1, instr(tel, ')', 1) - 1)
+			        , '02',  '서울'
+							, '031', '경기'
+							, '051', '부산'
+							, '052', '울산'
+							, '053', '대구'
+							, '055', '경남', '기타')
+		  , case substr(tel, 1, instr(tel, ')', 1) - 1)
+			       when '02'  then '서울'
+						 when '031' then '경기'
+						 when '051' then '부산'
+						 when '052' then '울산'
+						 when '053' then '대구'
+						 when '055' then '경남'
+						 else '기타'
+				 end as 지역번호2
+  from student
+ where deptno1 = 101;
+ 
+-- 2. case when 값(or 표현식) between and true
+-- emp테이블에서 sal 1~1000 1등급, 1001~2000 2등급, 2001~3000 3등급, 3001~4000 4등급
+-- 4001보다 크면 5등급
+select empno
+     , ename
+		 , sal
+		 , case when sal between    1 and 1000 then '1등급'
+		        when sal between 1001 and 2000 then '2등급'
+		        when sal between 2001 and 3000 then '3등급'
+		        when sal between 3001 and 4000 then '4등급'
+		        when sal > 4001 then '5등급'		 
+		    end 급여등급
+  from emp;
+
+-- ex01) student에서 jumin에 월참조해서 해당월의 분기를 출력(1Q, 2Q, 3Q, 4Q)
+-- name, jumin, 분기
+select name
+     , jumin
+		 , substr(jumin, 3, 2) month
+		 , case when substr(jumin, 3, 2) between '01' and '03' then '1Q'
+		        when substr(jumin, 3, 2) between '04' and '06' then '2Q'
+						when substr(jumin, 3, 2) between '07' and '09' then '3Q'
+						when substr(jumin, 3, 2) between '10' and '12' then '4Q'
+		    end 분기
+  from student;
+
+-- ex02) dept에서 10=회계부, 20=연구실, 30=영업부, 40=전산실
+-- 1) decode
+-- 2) case
+-- deptno, 부서명
+select deptno
+     , decode(deptno, 10, '회계부'
+		                , 20, '연구실'
+										, 30, '영업부'
+										, 40, '전산실') as 부서명
+		 , case deptno when 10 then '회계부'
+						       when 20 then '연구실'
+									 when 30 then '영업부'
+									 when 40 then '전산실'
+			  end as 부서명2
+  from emp;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- ex03) 급여인상율을 다르게 적용하기
+-- emp에서 sal < 1000 0.8%인상, 1000~2000 0.5%, 2001~3000 0.3%
+-- 그 이상은 0.1% 인상분 출력
+-- ename, sal(인상전급여), 인상후급여 
+-- 1) decode
+-- 2) case
+-- sign(sal - 1000) 함수
+select sign(-1), sign(0), sign(1) from dual;
+-- JavaScript에서 객체 or 값을 비교할 때 -1 0 1
+select ename
+     , sal
+		 , decode(sign(sal-1000)
+		        , -1, sal * 1.08                  -- sal < 1000
+		        ,  0, sal * 1.05	                 -- sal = 1000
+						,  decode(sign(sal - 2000)
+						        , -1, sal * 1.05 -- sal < 2000
+										,  0, sal * 1.05 -- sal = 2000
+										,  decode(sign(sal - 3000)
+										         , -1, sal * 1.03 -- sal < 3000
+														 ,  0, sal * 1.03 -- sal = 2001
+														 ,  1, sal * 1.01))) as 인상후급여 -- sal > 3000
+											 
+		 , case when sal between    1 and 1000 then sal * 1.08
+	          when sal between 1001 and 2000 then sal * 1.05
+						when sal between 2001 and 3000 then sal * 1.03
+						when sal > 3000 then sal * 1.01
+				end 인상후급여														
+  from emp;
