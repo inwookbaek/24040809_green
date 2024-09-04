@@ -130,17 +130,180 @@ select * from emp999;
 
 /* update 연습문제 */
 -- 실습1)  emp999에서 모든 사원의 급여를 10%인상하기(수정)
+select sal, sal*1.1 from emp999;
+update emp999
+   set sal = sal * 1.1;
+select sal from emp999;
+
 -- 실습2) emp999에서 모든 사원의 입사일을 현재일(sysdate)로 수정
+update emp999
+	 set hiredate = sysdate;
+
 -- 실습3) professor에서 직급이 'assistant professor'인 사람의 bonus를 200으로 인상
+select * from professor where position = 'assistant professor';
+update professor
+   set bonus = 200
+ where position = 'assistant professor';
+
 -- 실습4) professor에서 'Sharon Stone'과 직급이 동일한 교수들의 급여를 15%인상
 --        서브쿼리를 이용 -> where절에 서브쿼리를 지정
 --                        -> where position = (서브쿼리 즉, select문을 정의)
+select * from professor where name = 'Sharon Stone';
+select * from professor where position = 'instructor';
+
+select pay, pay*1.5
+  from professor
+ where position = 'instructor';
+ 
+select pay, pay*1.5
+  from professor
+ where position = (select position from professor where name = 'Sharon Stone'); 
+ 
+update professor
+   set pay = pay * 1.5
+ where position = (select position from professor where name = 'Sharon Stone'); 	
+ 
+select pay
+  from professor
+ where position = (select position from professor where name = 'Sharon Stone'); 
+
+-- emp
+create table emp99 as select * from emp;
 
 -- ex01) job이 'MANAGER'인 사원은 급여를 15%인상하기
+select * from emp99 where job = 'MANAGER';
+update emp99
+   set sal = sal * 1.15
+ where job = 'MANAGER';
+
 -- ex02) SCOTT 사원의 부서번호=30번, JOB=MANAGER로 한꺼번에 수정하는 쿼리
+update emp99
+   set deptno = 30
+	   , job = 'MANAGER'
+ where ename = 'SCOTT';
+select * from emp99;	
+
 -- ex03) professor테이블에서 'Sharon Stone'교수의 bonus를 100만원으로 인상하기
+select * from professor where name = 'Sharon Stone';
+update professor
+   set bonus = nvl(bonus, 0) + 100
+ where name = 'Sharon Stone';
+
 -- ex04) professor에서 'Sharon Stone'교수의 직급과 동일한 직급을 가진 교수들중
--- 현재급여가 250이 안되는 교수들의 급여를 15%인상하세요!
+-- 현재급여가 300보다 작은 교수들의 급여를 15%인상하세요!
+select * from professor where name = 'Sharon Stone';
+select * from professor where pay < 500 
+                          and position = (select position from professor where name = 'Sharon Stone');
+
+update professor
+   set pay = pay * 1.5
+ where position = (select position from professor where name = 'Sharon Stone')
+   and pay < 500; 	
 
 -- 문제풀이사이트 : www.gurubee.net
+
+/* C. delete 
+	테이블에서 특정조건에 맞는 자료를 삭제하는 명령
+	문법: delete from 테이블명 [where .... ]
+*/
+select * from dept2 where dcode = 9000;
+-- dcode 9000인 자료 삭제
+delete from dept2 where dcode = 9000;
+
+-- 실습. 부서번호가 9000~9999사이의 자료를 삭제하기
+delete from dept2 where dcode between 9000 and 9999;
+
+/* D. merge */
+-- 여러개의 테이블을 한개의 테이블로 병합하는 명령
+-- merge into 테이블1
+--      using 테이블2 on 병합조건절
+--            when     matched then update set 업데이트할 내용
+--                                  [delete where 조건절]
+--            when not matched then insert values(컬럼이름...)
+create table charge_01 (
+		u_date   varchar2(6)
+	, cust_no  number
+	, u_time   number
+	, charge   number
+);
+
+create table charge_02 (
+		u_date   varchar2(6)
+	, cust_no  number
+	, u_time   number
+	, charge   number
+);
+
+create table charge_03 (
+		u_date   varchar2(6)
+	, cust_no  number
+	, u_time   number
+	, charge   number
+);
+
+create table charge_total (
+		u_date   varchar2(6)
+	, cust_no  number
+	, u_time   number
+	, charge   number
+);
+
+insert into charge_01 values('241001', 1000, 2, 1000);
+insert into charge_01 values('241001', 1001, 2, 1000);
+insert into charge_01 values('241001', 1002, 1, 1000);
+
+insert into charge_02 values('241002', 1000, 3, 1500);
+insert into charge_02 values('241002', 1001, 4, 2000);
+insert into charge_02 values('241002', 1003, 2, 500);
+insert into charge_02 values('241002', 1003, 20, 5000);
+
+select * from charge_01
+union all
+select * from charge_02
+union all
+select * from charge_03;
+
+-- 1. merge : charge_01 + charge_total
+merge into charge_total tot
+     using charge_01    c01 on (tot.u_date = c01.u_date)
+		  when     matched then update set tot.cust_no = c01.cust_no
+			when not matched then insert values(c01.u_date, c01.cust_no, c01.u_time, c01.charge);
+
+select * from charge_total;
+
+-- 2. merge : charge_02 + charge_total
+merge into charge_total tot
+     using charge_02    c02 on (tot.u_date = c02.u_date)
+		  when     matched then update set tot.cust_no = c02.cust_no
+			when not matched then insert values(c02.u_date, c02.cust_no, c02.u_time, c02.charge);
+			
+			
+-- 3. merge : charge_03 -> update charge_total
+insert into charge_03 values('241002', 1003, 10, 8000);
+insert into charge_03 values('241003', 1004, 10, 8000);
+
+merge into charge_total tot
+     using charge_03    c03 on (tot.u_date = c03.u_date and tot.cust_no = c03.cust_no)
+		  when     matched then update set tot.u_time = c03.u_time, tot.charge = c03.charge
+			when not matched then insert values(c03.u_date, c03.cust_no, c03.u_time, c03.charge);			
+
+-- 4. merge : update and delete
+merge into charge_total tot
+     using charge_03    c03 on (tot.u_date = c03.u_date and tot.cust_no = c03.cust_no)
+		  when     matched then update set tot.u_time = c03.u_time, tot.charge = c03.charge
+													  delete where (tot.u_date = c03.u_date and tot.cust_no = c03.cust_no)
+			when not matched then insert values(c03.u_date, c03.cust_no, c03.u_time, c03.charge);
+
+select * from charge_total;
+
+
+
+
+
+
+
+
+
+
+
 
