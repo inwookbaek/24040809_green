@@ -617,6 +617,34 @@ end pro_sal_raise;
 
 call pro_sal_raise(10, 1.5);
 
+-- 실습3. 사번을 입력받아서 급여순서를 출력하는 procedure
+create or replace procedure get_emp_rank(
+	p_empno in  emp.empno%type,
+	o_rank  out number)
+is
+begin
+	select rnk
+	  into o_rank
+	  from (select empno, rank() over(order by sal desc) as rnk
+		        from emp)
+	 where empno = p_empno;
+	 
+exception
+	when no_data_found then o_rank := -1;
+	when others        then raise_application_error(-20001, '예상치못한 예외가 발생!!! : ' || sqlerrm); 
+end get_emp_rank;
+
+
+-- 익명함수에서는 프로시저에서는 call로 호출하지 않고
+-- 직접 프로시저를 호출한다.
+declare
+	v_rank   number;
+begin
+	get_emp_rank(7369, v_rank);
+	dbms_output.put_line('7369의 급여수위 = ' || v_rank);
+end;
+
+
 /* 연습문제 */
 -- view연습문제를 procedure로 만들어 보세요
 -- dbms_output.put_line
