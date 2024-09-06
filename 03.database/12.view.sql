@@ -159,11 +159,110 @@ select * from mv_prof;
 
 /* 연습문제 */
 -- ex01) professor, department을 join 교수번호, 교수이름, 소속학과이름 조회 View
--- ex02) inline view를 사용, student, department를 사용 학과별로 
+create or replace view v_prof_def
+as
+select p.profno   교수번호
+     , p.name     교수이름
+		 , d.dname    학과명
+  from professor p, department d
+ where p.deptno = d.deptno;
+
+select * 
+  from v_prof_def
+ where profno = 1002; --> ORA-00904: "PROFNO": invalid identifier 
+
+select * 
+  from v_prof_def
+ where 교수번호 = 1002;
+
+-- ex02) inline view를 사용, student, department를 사용 학과별로
 -- 학생들의 최대키, 최대몸무게, 학과명을 출력
+select d.dname 학과명
+     , s.최고신장
+		 , s.최고체중
+  from (select deptno1, max(height) 최고신장, max(weight) 최고체중
+	        from student 
+				 group by deptno1) s
+	   , department d
+ where s.deptno1 = d.deptno;
+	
 -- ex03) inline view를 사용, 학과명, 학과별최대키, 학과별로 가장 키가 큰 학생들으;
 -- 이름과 키를 출력
+select d.dname 학과명
+     , std.name 학생명
+		 , std.height 신장
+		 , std.weight 체중
+  from (select deptno1, max(height) 최고신장, max(weight) 최고체중
+	        from student 
+				 group by deptno1) s
+	   , department d
+		 , student    std
+ where s.deptno1 = d.deptno
+   and std.height = s.최고신장
+	 and std.weight = s.최고체중;
+
 -- ex04) student에서 학생키가 동일학년의 평균키보다 큰 학생들의 학년과 이름과 키
 -- 해당 학년의 평균키를 출력 단, inline view로
+select grade, avg(height) 학년별평균신장 from student group by grade;
+
+create or replace view v_학년별평균신장 as
+select s.grade
+     , s.name
+		 , s.height
+		 , g.학년별평균신장
+  from student s
+		 , (select grade, avg(height) 학년별평균신장 
+		      from student 
+				 group by grade) g
+ where s.grade = g.grade
+	 and s.height > g.학년별평균신장
+  order by s.grade;
+
+select * from v_학년별평균신장;
+
 -- ex05) professor에서 교수들의 급여순위와 이름, 급여출력 단, 급여순위 1~5위까지
+select rownum, name, pay from professor order by pay desc;
+
+select rownum, name, pay 
+  from (select name, pay 
+	        from professor 
+				 order by pay desc)
+ where rownum <= 5;
+
 -- ex06) 교수번호정렬후 3건씩해서 급여합계와 급여평균을 출력
+select ceil(1/3) , ceil(2/3), ceil(3/3) from dual;
+select ceil(4/3) , ceil(5/3), ceil(6/3) from dual;
+
+select profno, name, pay, rownum num, ceil(rownum/3)  from professor;
+
+select num
+     , profno 
+		 , name
+		 , pay
+		 , sum(pay)
+		 , round(avg(pay), 2)
+  from (select profno, name, pay, rownum num 
+	        from professor)
+ group by ceil(num/3), rollup(profno, name, pay, num)
+ order by ceil(num/3);
+
+create or replace view v_3건씩건너_합계_평균
+as
+select num
+     , profno 
+		 , name
+		 , pay
+		 , sum(pay)           "3건씩건너 급여합계"
+		 , round(avg(pay), 2) "3건씩건너 평균급여"
+  from (select profno, name, pay, rownum num 
+	        from professor)
+ group by ceil(num/3), rollup((profno, name, pay, num))
+ order by ceil(num/3);
+ 
+select * from v_3건씩건너_합계_평균;
+
+
+
+
+
+
