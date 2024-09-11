@@ -39,7 +39,7 @@ public class VariableMain1 {
 		// 2) 데이터타입 변수명 = 초기값;   -- 변수선언과 동시에 초기화
 		// 3) 한번 선언된 데이터타입은 원칙적으로 변경할 수 없다.
 		// 4) 데이터타입 : 
-		//    - 기본타입 : 숫자(byte, short, char, int, double, float), 문자(String)
+		//    - 기본타입 : 숫자(byte, short, char, int, double, float), 문자(String), boolean
 		//    - 참조타입 : 클래스, 배열, enum, 인터페이스
 		
 		int firstNum;  // 변수선언만
