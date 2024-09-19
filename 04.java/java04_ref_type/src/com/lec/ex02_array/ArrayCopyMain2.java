@@ -1,4 +1,7 @@
 package com.lec.ex02_array;
+
+import java.util.Arrays;
+
 /*
 	배열의 복사
 	
@@ -24,15 +27,38 @@ public class ArrayCopyMain2 {
 		String[][] names1 = {{"거미", "나얼"}, {"소향", "손흥민", "이강인"}};		
 		String[][] names2 = names1;
 		System.out.println("names1.hashCode = " + names1.hashCode());
-		System.out.println("names2.hashCode = " + names2.hashCode());
 		System.out.println();
+		
+		System.out.println("names1[0].hashCode = " + names1[0].hashCode());
+		System.out.println("names1[0][0].hashCode(거미) = " + names1[0][0].hashCode());
+		System.out.println("names1[0][1].hashCode(나얼) = " + names1[0][1].hashCode());
+		System.out.println();
+		
+		System.out.println("names1[1].hashCode = " + names1[1].hashCode());
+		System.out.println("names1[1][0].hashCode(소향) = " + names1[1][0].hashCode());
+		System.out.println("names1[1][1].hashCode(손흥민) = " + names1[1][1].hashCode());
+		System.out.println("names1[1][2].hashCode(이강인) = " + names1[1][2].hashCode());
+		System.out.println("-".repeat(50));	
+		
+		System.out.println("names2[0].hashCode = " + names2[0].hashCode());
+		System.out.println("names2[0][0].hashCode(거미) = " + names2[0][0].hashCode());
+		System.out.println("names2[0][1].hashCode(나얼) = " + names2[0][1].hashCode());
+		System.out.println();
+		
+		System.out.println("names2[1].hashCode = " + names2[1].hashCode());
+		System.out.println("names2[1][0].hashCode(소향) = " + names2[1][0].hashCode());
+		System.out.println("names2[1][1].hashCode(손흥민) = " + names2[1][1].hashCode());
+		System.out.println("names2[1][2].hashCode(이강인) = " + names2[1][2].hashCode());		
+		System.out.println("-".repeat(50));	
 		
 		// 2) 깊은 복사 - for문
 		String[] old1 = {"거미", "나얼", "소향"};
 		String[] new1 = new String[3];
 		System.out.println("old1.hashCode = " + old1.hashCode());
 		System.out.println("new1.hashCode = " + new1.hashCode());
-		System.out.println("old1[0].hashCode = " + old1[0].hashCode());
+		System.out.println("old1[0].hashCode(거미) = " + old1[0].hashCode());
+		System.out.println("old1[1].hashCode(나얼) = " + old1[1].hashCode());
+		System.out.println("old1[2].hashCode(소향) = " + old1[2].hashCode());
 		System.out.println();
 		
 		for(int i=0;i<old1.length;i++) {
@@ -40,6 +66,7 @@ public class ArrayCopyMain2 {
 		}
 		
 		old1[0] = "손흥민";  // 거미 -> 손흥민
+		old1[2] = "김민재";  // 소향 -> 김민재	
 		System.out.print("old1 = {");
 		for(String old : old1) {
 			System.out.print(old + "(" + old.hashCode() + "),");
@@ -51,32 +78,50 @@ public class ArrayCopyMain2 {
 			System.out.print(n + "(" + n.hashCode() + "),");
 		}
 		System.out.print("}\n");
-		System.out.println("-".repeat(50));	
-		
+		System.out.println("-".repeat(50)+"\n");		
 		
 		// 3) 깊은 복사 - System.arraycopy(old, 시작, new, new시작, old크기)
-		// 4) 깊은 복사 - Arrays.copyOf(src, new.length)
-		// 5) 깊은 복사 - Arrays.copyOfRange(src, start. end-1);
+		String[] old2 = {"거미", "나얼", "소향"};
+		String[] new2 = new String[6];		
+		System.arraycopy(old2, 0, new2, 0, old2.length);
+		System.out.print("old2 = {");
+		for(String old : old2) {
+			System.out.print(old + "(" + old.hashCode() + "),");
+		}
+		System.out.print("}\n");
 		
-
+		new2[0] = "황인범";
+		new2[3] = "BTS";
+		new2[4] = "블랙핑크";
+		new2[5] = "뉴진스";
+		
+		System.out.print("new2 = {");
+		for(String n : new2) {
+			System.out.print(n + "(" + n.hashCode() + "),");
+		}	
+		System.out.print("}\n" + "-".repeat(50)+"\n");
+		
+		// 4) 깊은 복사 - Arrays.copyOf(src, new.length)
+		int[] old3 = {1,2,3,4,5};
+		int[] new3 = Arrays.copyOf(old3, 3);
+		System.out.println("new3.length = " + new3.length);
+		System.out.print("old3 = {");
+		for(int old : old3) {
+			System.out.print(old + ",");
+		}
+		System.out.print("}\n");		
+		System.out.print("new3 = {");
+		for(int n : new3) {
+			System.out.print(n + ",");
+		}
+		System.out.print("}\n" + "-".repeat(50)+"\n");		
+				
+		// 5) 깊은 복사 - Arrays.copyOfRange(src, start. end-1);
+		int[] new4 = Arrays.copyOfRange(old3, 1, 4);
+		System.out.print("new4 = {");
+		for(int n : new4) {
+			System.out.print(n + ",");
+		}
+		System.out.print("}\n" + "-".repeat(50)+"\n");	
 	}
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
