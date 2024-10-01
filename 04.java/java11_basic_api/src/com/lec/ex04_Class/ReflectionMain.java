@@ -8,7 +8,7 @@ public class ReflectionMain {
 
 	public static void main(String[] args) throws Exception {
 
-		Class _class = Class.forName("java.lang.String");
+		Class _class = Class.forName("java.util.Calendar");
 		// Class _class = Class.forName("com.lec.ex04_Class.Car");
 		
 		// 1. 클래스의 정보
