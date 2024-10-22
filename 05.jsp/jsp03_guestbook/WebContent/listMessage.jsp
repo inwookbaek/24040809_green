@@ -25,7 +25,8 @@
 	
 	<h1>실습. 게시판 </h1>
 	bno(auto), subject, writer, content, readcnt, crtdate
-	list, insert, delete
+	list, insert, delete 
+	update, paging
 	<hr />
 		
 	<form action="insertMessage.jsp" method="post">
