@@ -1,4 +1,4 @@
-package com.lec.vo;
+package com.lec.board.vo;
 
 public class ActionForward {
 
