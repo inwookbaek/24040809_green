@@ -1,5 +1,5 @@
-<%@page import="com.lec.vo.BoardVO"%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="com.lec.board.vo.BoardVO"%>
 <!DOCTYPE html>
 <html>
 <head>
