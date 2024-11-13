@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: jsp06_spmvc
+  mvc:
+    view:
+      prefix: /WEB-INF/
+      suffix: .jsp
+      
+server:
+  port: 8089
