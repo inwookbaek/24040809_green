@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>board/list</h1>
+	
+	[[${ boardList }]]
+	
+	<hr />
+	
+	<a th:href="|@{/board/read}|">읽기</a>
+	<a th:href="|@{/board/register}|">등록</a>
+</body>
+</html>

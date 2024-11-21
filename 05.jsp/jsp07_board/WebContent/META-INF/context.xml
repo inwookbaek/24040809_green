@@ -8,7 +8,7 @@
 		password="12345"
 		driverClassName="com.mysql.cj.jdbc.Driver"
 		factory="org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory"
-		url="jdbc:mysql://localhost:3306/board"
+		url="jdbc:mysql://192.168.100.251:3306/board"
 		maxTotal="50"
 	/>
 <!-- 
