@@ -7,12 +7,9 @@ import com.lec.board.domain.Board;
 
 public interface BoardSearch {
 
-	Page<Board> searchAll(String[] types, String keyword, Pageable pageable);
-	
-	
-	
 	Page<Board> searchLike(Pageable pageable);
-	void searchPageable();
-	void searchBooleanBuilder();
-	void searchAllPageImpl();
+	Page<Board> searchPageable(Pageable pageable);
+	Page<Board> searchBooleanBuilder(Pageable pageable);
+	Page<Board> searchAll(String[] types, String keyword, Pageable pageable);
+	Page<Board> searchAllImpl(String[] types, String keyword, Pageable pageable);
 }

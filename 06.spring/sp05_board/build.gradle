@@ -41,6 +41,9 @@ dependencies {
 	// DTO와 Entity간의 변환처리를 간단히 처리하기 위한 라이브러리
 	implementation 'org.modelmapper:modelmapper:3.2.1'
 	
+	// thymeleaf-layout
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.3.0'
+	
 	// querydsl
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
