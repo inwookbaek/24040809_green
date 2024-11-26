@@ -50,7 +50,6 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	
-	
 	@Override
 	public Long register(BoardDTO boardDTO) {
 		Board board = modelMapper.map(boardDTO, Board.class);
@@ -68,13 +67,16 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public void modify(BoardDTO boardDTO) {
-		// TODO Auto-generated method stub
+		
+		Optional<Board> result = boardRepository.findById(boardDTO.getBno());
+		Board board = result.orElseThrow();
+		board.change(boardDTO.getTitle(), boardDTO.getContent());
+		boardRepository.save(board);
 		
 	}
 
 	@Override
 	public void remove(Long bno) {
-		// TODO Auto-generated method stub
-		
+		boardRepository.deleteById(bno);
 	}
 }

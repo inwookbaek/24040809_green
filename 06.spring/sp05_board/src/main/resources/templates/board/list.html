@@ -111,3 +111,57 @@
 
 </div>
 
+<script layout:fragment="script" th:inline="javascript">
+
+	document.querySelector(".pagination").addEventListener("click", function (e) {
+	    e.preventDefault()
+	    e.stopPropagation()
+
+		const target = e.target
+/* 		
+		console.log(e)
+		console.log(target)
+		console.log(target.tagName)
+ */		
+		if(target.tagName != 'A') {
+			return
+		}
+		
+	    const num = target.getAttribute("data-num")
+	    const formObj = document.querySelector("form")
+	    
+	    formObj.innerHTML += `<input type='hidden' name='page' value='${num}'>`
+	    formObj.submit()  // localhost:8090/board/list?page=3
+	    		
+	}, false)
+
+	document.querySelector(".clearBtn").addEventListener("click", function (e) {
+	    e.preventDefault()
+	    e.stopPropagation()
+	    
+	    self.location = '/board/list'
+	    
+	}, false)	    
+	
+	// show modal window
+	const result = /*[[${result}]]*/''
+	const modal = new bootstrap.Modal(document.querySelector(".modal"))
+	
+	if(result) {
+		// alert(result)
+		modal.show()
+	}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
