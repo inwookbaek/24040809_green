@@ -27,8 +27,10 @@
             </div>
 
             <div class="input-group mb-3">
-              <span class="input-group-text">Writer</span>
-              <input type="text" name="writer" class="form-control" placeholder="Writer">
+              <span class="input-group-text">Writer</span>              
+              <input type="text" name="writer" class="form-control" 
+              		th:value="${#authentication.principal.username}" 
+              		placeholder="Writer" readonly>
             </div>
             
 			<!-- p651 end -->
@@ -91,6 +93,12 @@
 
 <script layout:fragment="script" th:inline="javascript">
 
+  // 로그인상황에서 /board/register를 호출하면 인증정보가 생성된 것을 확인할 수 있다.
+  
+  // const auth = /*[[${#authentication}]]*/''
+
+  const auth = /*[[${#authentication.principal}]]*/''
+  
   const errors = /*[[${errors}]]*/"";
   console.log(errors)
 
