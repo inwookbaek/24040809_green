@@ -15,8 +15,8 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
-import com.lec.board.security.Custom403Handler;
 import com.lec.board.security.CutomUserDetailsService;
+import com.lec.board.security.handler.Custom403Handler;
 
 import groovyjarjarantlr4.v4.parse.ANTLRParser.exceptionGroup_return;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +30,8 @@ import lombok.extern.log4j.Log4j2;
 // 만약, 코드로할 경우에는 컨트롤러의 메서드를 작성한 후에 다시 설정해야 하는 번거로움이 있다.
 // @EnableMethodSecurity의 prePostEnabled 속성은 권한을 체크하려는 메서드에 @PreAuthorize 또는
 // @PostAuthorize어노테이션을 이용해서 사전 or 사후에 권한 체크를 할 수 있다. 
-@EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
+@EnableMethodSecurity(prePostEnabled = true)
 public class CustomSecurityConfig {
 
 	private final DataSource dataSource;
@@ -82,7 +82,8 @@ public class CustomSecurityConfig {
 		return http.build();
 	}
 		
-	private AccessDeniedHandler accessDeniedHandler() {
+	@Bean
+	public AccessDeniedHandler accessDeniedHandler() {
 		return new Custom403Handler();
 	}
 

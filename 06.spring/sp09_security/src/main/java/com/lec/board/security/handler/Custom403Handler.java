@@ -1,4 +1,4 @@
-package com.lec.board.security;
+package com.lec.board.security.handler;
 
 import java.io.IOException;
 
@@ -25,7 +25,7 @@ public class Custom403Handler implements AccessDeniedHandler {
 	public void handle(HttpServletRequest req, HttpServletResponse res,
 			AccessDeniedException accessDeniedException) throws IOException, ServletException {
 		
-		log.info("------------- AccessDeniedHandler ------------");
+		log.info("------------- AccessDeniedHandler ------------> " + HttpStatus.FORBIDDEN.value());
 		
 		res.setStatus(HttpStatus.FORBIDDEN.value());
 		
@@ -41,10 +41,3 @@ public class Custom403Handler implements AccessDeniedHandler {
 	}
 
 }
-
-
-
-
-
-
-
