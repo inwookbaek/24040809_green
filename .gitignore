@@ -10,3 +10,4 @@ bin/
 .project
 servers/
 00.share/
+nginx-1.27.3/
