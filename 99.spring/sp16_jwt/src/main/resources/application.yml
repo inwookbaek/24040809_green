@@ -45,7 +45,7 @@ spring:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
 
 server:
-  port: 8090
+  port: 8091
   servlet:
     encoding:
       force-response: true
