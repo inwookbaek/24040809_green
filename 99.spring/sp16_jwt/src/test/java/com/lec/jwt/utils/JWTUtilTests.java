@@ -11,8 +11,8 @@ import com.lec.jwt.util.JWTUtil;
 
 import lombok.extern.log4j.Log4j2;
 
-@SpringBootTest
 @Log4j2
+@SpringBootTest
 public class JWTUtilTests {
 
 	@Autowired

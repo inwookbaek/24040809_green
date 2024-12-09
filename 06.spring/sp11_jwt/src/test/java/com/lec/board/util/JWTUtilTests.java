@@ -46,4 +46,17 @@ public class JWTUtilTests {
 			log.info("EMAIL: " + claim.get("email"));
 
 	}	
+	
+	@Test
+	public void testToken() {
+		
+		String jwtStr = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJtaWQiOiJhcGl1c2VyMTAiLCJpYXQiOjE3MzM0NDY4MzEsImV4cCI6MTczMzUzMzIzMX0.rDG-1yCVB1Qa8H80yp4VLYZhHxfRla9RSS8r94csdnA";
+		log.info(jwtStr);
+		
+		Map<String, Object> claim = jwtUtil.validateToken(jwtStr);
+		
+		log.info("MID: " + claim.get("mid"));
+		log.info("EMAIL: " + claim.get("email"));
+		
+	}	
 }
