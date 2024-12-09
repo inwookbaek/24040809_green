@@ -1,8 +1,10 @@
 package com.lec.board.service;
 
-import com.lec.board.dto.PageRequestDTO;
 import com.lec.board.dto.TodoDTO;
 
+import jakarta.transaction.Transactional;
+
+@Transactional
 public interface TodoService {
 
 	Long register(TodoDTO todoDTO);

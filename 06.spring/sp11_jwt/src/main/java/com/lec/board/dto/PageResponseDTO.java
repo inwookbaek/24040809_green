@@ -1,4 +1,4 @@
-package com.lec.jwt.dto;
+package com.lec.board.dto;
 
 import java.util.List;
 

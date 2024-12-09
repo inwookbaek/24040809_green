@@ -89,9 +89,6 @@ public class JWTUtil {
     }    
     public Map<String, Object> validateToken(String token) {
 
-    	
-    	log.info("1.............................");
-    	
         Map<String, Object> claim = null;
 
         claim = Jwts.parserBuilder()
@@ -99,9 +96,6 @@ public class JWTUtil {
 	                .build()
 	                .parseClaimsJws(token) // 파싱 및 검증, 실패 시 에러
 	                .getBody();        
-        
-        log.info("2.............................");
-        
         
         return claim;
     } 

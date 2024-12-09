@@ -15,13 +15,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TodoDTO {
 
-	private Long tno;
-	private String title;
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	private LocalDate dueDate;
-	
-	private String writer;
-	private boolean complete;
-	
+    private Long tno;
+    private String title;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    private LocalDate dueDate;
+
+    private String writer;
+    private boolean complete;
 }

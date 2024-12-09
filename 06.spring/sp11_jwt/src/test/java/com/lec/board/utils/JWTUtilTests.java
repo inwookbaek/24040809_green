@@ -1,4 +1,4 @@
-package com.lec.jwt.utils;
+package com.lec.board.utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.lec.jwt.util.JWTUtil;
+import com.lec.board.util.JWTUtil;
 
 import lombok.extern.log4j.Log4j2;
 

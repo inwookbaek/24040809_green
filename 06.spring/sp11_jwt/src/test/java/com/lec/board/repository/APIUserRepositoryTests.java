@@ -9,24 +9,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.lec.board.domain.APIUser;
 
+import lombok.extern.log4j.Log4j2;
+
 @SpringBootTest
+@Log4j2
 public class APIUserRepositoryTests {
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
-	@Autowired
-	private APIUserRepository apiUserRepository;
-	
-	@Test
-	public void testInserts() {
-		IntStream.rangeClosed(1, 100)
-		         .forEach(i -> {
-		        	 APIUser apiUser = APIUser.builder()
-		        			 .mid("apiuser"+ i)
-		        			 .mpw(passwordEncoder.encode("12345"))
-		        			 .build();
-		        	 apiUserRepository.save(apiUser);
-		         });
-	}
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private APIUserRepository apiUserRepository;
+
+    @Test
+    public void testInserts() {
+        IntStream.rangeClosed(1,100).forEach(i -> {
+            APIUser apiUser = APIUser.builder()
+                    .mid("apiuser"+i)
+                    .mpw( passwordEncoder.encode("12345") )
+                    .build();
+
+            apiUserRepository.save(apiUser);
+        });
+    }
 }

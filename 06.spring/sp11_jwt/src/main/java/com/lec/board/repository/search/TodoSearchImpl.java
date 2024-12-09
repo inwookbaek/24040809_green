@@ -1,4 +1,4 @@
-package com.lec.jwt.repository.search;
+package com.lec.board.repository.search;
 
 import java.util.List;
 
@@ -6,10 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-import com.lec.jwt.domain.QTodo;
-import com.lec.jwt.domain.Todo;
-import com.lec.jwt.dto.PageRequestDTO;
-import com.lec.jwt.dto.TodoDTO;
+import com.lec.board.domain.QTodo;
+import com.lec.board.domain.Todo;
+import com.lec.board.dto.PageRequestDTO;
+import com.lec.board.dto.TodoDTO;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;

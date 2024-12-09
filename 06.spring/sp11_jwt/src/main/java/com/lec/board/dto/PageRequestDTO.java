@@ -13,23 +13,29 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PageRequestDTO {
 
-	@Builder.Default
-	private int page = 1;
-	
-	@Builder.Default
-	private int size = 10;
-	
-	private String type;  // 검색유형: t,c,w,tc,tw,twc
-	private String keyword;
-	private LocalDate from;
-	private LocalDate to;
-	private Boolean completed;
+    @Builder.Default
+    private int page = 1;
+
+    @Builder.Default
+    private int size = 10;
+
+    private String type; // 검색의 종류 t,c, w, tc,tw, twc
+
+    private String keyword;
+
+    //추가된 내용들
+    private LocalDate from;
+
+    private LocalDate to;
+
+    private Boolean completed;
+
 
     public String[] getTypes(){
         if(type == null || type.isEmpty()){
@@ -66,5 +72,6 @@ public class PageRequestDTO {
         }
 
         return link;
-    }	
+    }
+
 }

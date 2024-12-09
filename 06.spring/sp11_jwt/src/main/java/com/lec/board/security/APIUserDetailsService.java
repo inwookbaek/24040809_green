@@ -16,31 +16,29 @@ import com.lec.board.repository.APIUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-@Log4j2
 @Service
+@Log4j2
 @RequiredArgsConstructor
 public class APIUserDetailsService implements UserDetailsService {
-	
-	private final APIUserRepository apiUserRepository;
-	
-	@Override
-	public UserDetails loadUserByUsername(String username) 
-			throws UsernameNotFoundException {
-		
-		Optional<APIUser> result = apiUserRepository.findById(username);
-		APIUser apiUser = result.orElseThrow(
-				() -> new UsernameNotFoundException("회원아이디를 찾지 못했습니다!!"));
-		
-		log.info("----------- APIUserDetailsService apiUser -----------------");
-		
-		APIUserDTO dto = new APIUserDTO(
-				apiUser.getMid(), 
-				apiUser.getMpw(), 
-				List.of(new SimpleGrantedAuthority("ROLE_USER")));
-		
-		log.info("apiUserDTO ==> " + dto);
-		
-		return dto;
-	}
 
+    //주입
+    private final APIUserRepository apiUserRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<APIUser> result = apiUserRepository.findById(username);
+
+        APIUser apiUser = result.orElseThrow(() -> new UsernameNotFoundException("Cannot find mid"));
+
+        log.info("APIUserDetailsService apiUser-------------------------------------");
+
+        APIUserDTO dto =  new APIUserDTO(
+                apiUser.getMid(),
+                apiUser.getMpw(),
+                List.of(new SimpleGrantedAuthority("ROLE_USER")));
+
+        log.info(dto);
+
+        return dto;
+    }
 }
