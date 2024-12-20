@@ -59,7 +59,6 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs.add("-parameters")
 }
@@ -81,4 +80,13 @@ compileQuerydsl{
 
 configurations {
     querydsl.extendsFrom compileClasspath
+}
+
+jar {
+    enabled = false
+}
+
+bootJar {
+    archiveFileName = 'app.jar'
+    launchScript()
 }
